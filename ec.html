@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head>
+    <title>EC内买工具</title>
+    <script src="jquery-3.1.1.min.js"></script>
+    <script>
+        function CreateArray() {
+            $.getJSON("orderlist.json", function (data) {
+                console.log("JSON Loaded");
+                var productList = [];
+                var productQuantity = [];
+                $.each(data, function (key, val) {
+                    productList.push(key);
+                    productQuantity.push(val);
+                    //productQuantity.push('var ' + "productList " + "[" + key + ",");
+                });
+
+                var prodcutListString = 'var ' + "productList " + "= " + "[";
+                var productQuantityString = 'var ' + "productQuantity " + "= " + "[";
+                for (var i = 0; i < productList.length; i++) {
+                    if (i < productList.length - 1) {
+                        prodcutListString += "\'" + productList[i] + "\'" + ",";
+                        productQuantityString += "\'" + productQuantity[i] + "\'" + ",";
+                    } else {
+                        prodcutListString += "\'" + productList[i] + "\'";
+                        productQuantityString += "\'" + productQuantity[i] + "\'";
+                    }
+
+                }
+                prodcutListString += "];";
+                productQuantityString += "];";
+                console.log(prodcutListString);
+                $('#list').append(prodcutListString);
+                $('#quantity').append(productQuantityString);
+                $('#countordernumber').append("产品数" + productList.length + " ");
+            });
+
+
+        }
+    </script>
+</head>
+
+<body>
+    <ul>
+         <li>
+             <p>将Excel表格格式调整如下图（第一行为SAP Code, 第二行为对应购买数量），将表格另存为csv格式</p>
+             <p><img src="samplecsv.JPG"/></p>
+         </li>
+        
+        <li>使用<a href="https://json-csv.com/reverse" target="_blank">csv-to-json工具</a>将.csv文件转换为.json格式文件</li>
+        <li>将转换后的.json文件命名为<strong>orderlist.json</strong>并存放至本工具目录</li>
+        <li>点击本页面中的Generate Array按钮</li>
+    </ul>
+   
+        <button onclick="CreateArray()">Generate Array</button>
+    <p id="list"></p>
+    <p id="quantity"></p>
+    <p id="countordernumber">
+</body>
+
+</html>
